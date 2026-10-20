@@ -1,0 +1,22 @@
+databases:
+  - name: tododb
+    databaseName: tododb
+    user: todouser
+
+services:
+  - type: web
+    name: todo-django-app
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn todo_listproject.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: tododb
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"

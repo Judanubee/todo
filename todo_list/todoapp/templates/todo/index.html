@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo List</title>
+    
+    <!-- CDN de Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    
+    <!-- Tu archivo CSS personalizado externo -->
+    <link rel="stylesheet" href="{% static 'todo/style.css' %}">
+</head>
+<body class="azul_fondo">
+
+    <div class="container">
+        <!-- 1. SECCIÓN DE TAREAS PENDIENTES -->
+        <div class="row">
+            <div class="col s12">
+                <div class="card white z-depth-1">
+                    <div class="card-content azul_portada">
+                                <span class="card-title center-align claro-text"><strong>Te vas a poner a chambear? (Pendientes)</strong></span>
+                        
+                        <div class="horizontal-scroll-container mt-3">
+                            {% for task in todo %}
+                                {% if not task.complete %}
+                                    <div class="card negro task-card">
+                                        <div class="card-content ">
+                                            <span class="card-title claro_text truncate">{{ task.titulo }}</span>
+                                            <p class="claro_text">{{ task.descripcion }}</p>
+                                            <br>
+                                            <!-- Badge con margen inferior -->
+                                            <p class="status-spacing">
+                                                <span class="badge rosa azul_text">Pendiente</span>
+                                            </p>
+                                            <br><br>
+                                            
+                                            <!-- Formulario automático sin botón -->
+                                            <form method="POST" action="{% url 'edit_todo' task.id %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="titulo" value="{{ task.titulo }}">
+                                                <input type="hidden" name="descripcion" value="{{ task.descripcion }}">
+                                                
+                                                <p class="checkbox-container">
+                                                    <label class="white-text">
+                                                        <input type="checkbox" name="complete" onchange="this.form.submit()">
+                                                        <span>Marcar como completada</span>
+                                                    </label>
+                                                </p>
+                                            </form>
+                                        </div>
+                                        
+                                        <div class="card-action">
+                                            <a href="{% url 'edit_todo' task.id %}" class="btn-small azul_fondo">EDITAR</a>
+                                            <form method="POST" action="{% url 'delete_todo' task.id %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn-flat red-text">BORRAR</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. SECCIÓN DE TAREAS COMPLETADAS (DESPLEGABLE) -->
+        <div class="row">
+            <div class="col s12">
+                <div class="card white z-depth-1">
+                    <div class="card-content azul_portada">
+                        <details>
+                            <summary class="card-title white_text" style="cursor: pointer; font-weight: bold;"><Strong>
+                                Tareas Completadas
+                            </Strong>
+                            </summary>
+                            
+                            <div class="horizontal-scroll-container mt-3">
+                                {% for task in todo %}
+                                    {% if task.complete %}
+                                        <div class="card negro task-card">
+                                            <div class="card-content" claro_text>
+                                                <span class="card-title claro_text truncate">{{ task.titulo }}</span>
+                                                <p class="claro_text">{{ task.descripcion }}</p>
+                                                
+                                                <p class="status-spacing">
+                                                    <span class="badge green white-text">Completada</span>
+                                                </p><br><br>
+                                                
+                                                <!-- Formulario automático sin botón -->
+                                                <form method="POST" action="{% url 'edit_todo' task.id %}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="titulo" value=" {{ task.titulo }}">
+                                                    <input type="hidden" name="descripcion" value="{{ task.descripcion }}">
+                                                    
+                                                    <p class="checkbox-container">
+                                                        <label>
+                                                            <input type="checkbox" name="complete" checked onchange="this.form.submit()">
+                                                            <span>Marcar como pendiente</span>
+                                                        </label>
+                                                    </p>
+                                                </form>
+                                            </div>
+                                            
+                                            <div class="card-action">
+                                                <a href="{% url 'edit_todo' task.id %}" class="btn-small azul_fondo">EDITAR</a>
+                                                <form method="POST" action="{% url 'delete_todo' task.id %}" style="display:inline;">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn-flat red-text">BORRAR</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. SECCIÓN INFERIOR: Caja Centrada para Agregar Tarea -->
+        <div class="row">
+            <div class="col s12 m8 l6 offset-m2 offset-l3">
+                <div class="card indigo lighten-5 z-depth-2">
+                    <div class="card-content azul_portada">
+                        <span class="card-title white_text"><strong>Agregar Nueva Tarea</strong></span>
+                        
+                        <form method="POST" action="{% url 'todo_create' %}">
+                            {% csrf_token %}
+                            
+                            <div class="input-field">
+                                <input type="text" id="titulo" name="titulo" required>
+                                <label for="titulo" class="white-text">Título de la tarea</label>
+                            </div>
+
+                            <div class="input-field">
+                                <input type="text" id="descripcion" name="descripcion">
+                                <label for="descripcion" class="white-text">Descripción</label>
+                            </div>
+                            
+                            <div class="center-align">
+                                <button type="submit" class="btn waves-effect waves-light azul_fondo width-100">
+                                    Guardar Tarea
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CDN de JavaScript de Materialize -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>

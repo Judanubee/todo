@@ -1,0 +1,74 @@
+/* Contenedor con scroll horizontal para las tarjetas */
+
+body 
+{
+    font-family: Arial, sans-serif;
+    background-color: green;
+    margin: 0;
+    padding: 0;
+}
+.horizontal-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding-bottom: 15px;
+}
+
+/* Tamaño fijo para cada tarjeta de tarea */
+.task-card {
+    min-width: 280px;
+    max-width: 300px;
+    flex-shrink: 0;
+}
+
+/* Clase para que el botón abarque todo el ancho */
+.width-100 {
+    width: 100%;
+}
+
+
+/* Separación entre el badge de status y el checkbox */
+.status-spacing {
+    margin-bottom: 20px;
+}
+
+/* Espaciado interno para la casilla de verificación */
+.checkbox-container {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+
+/*paleta de colores*/
+.azul_portada { background-color: #1727A3; }
+.azul_fondo { background-color: #14246B; }
+.claro { background-color: #AEBBEE; }
+.blanco_2 { background-color: #FBFCF5; }
+.rosa { background-color: #F68089; }
+.negro { background-color: #1E191A; }
+
+.claro_text { color: #AEBBEE; }
+.azul_text { color: #14246B; }
+
+
+/* 1. Define el grosor/alto de la barra de desplazamiento horizontal */
+.horizontal-scroll-container::-webkit-scrollbar {
+    height: 10px; /* Alto de la barra horizontal */
+}
+
+/* 2. El fondo por donde corre la barra (pista / track) */
+.horizontal-scroll-container::-webkit-scrollbar-track {
+    background: #1727A3; /* Color gris claro de fondo */
+    border-radius: 8%; /* Bordes redondeados */
+}
+
+/* 3. La barra deslizante (thumb / la barrita que mueves) */
+.horizontal-scroll-container::-webkit-scrollbar-thumb {
+    background: var(--primary-color, #14246B); /* Usa tu variable de color o un color directo */
+    border-radius: 10px;                       /* Bordes suavemente redondeados */
+}
+
+/* 4. Efecto cuando el usuario pasa el mouse encima de la barra */
+.horizontal-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #AEBBEE; /* Un tono más oscuro al hacer hover */
+}
