@@ -10,22 +10,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     
     <!-- Tu archivo CSS personalizado externo -->
-    <link rel="stylesheet" href="{% static 'todo/style.css' %}">
+    <link rel="stylesheet" href="{% static 'todo/css/style.css' %}">
+
+    <script src="{% static 'todo/js/draganddrop.js' %}" defer></script>
+
 </head>
 <body class="azul_fondo">
+
 
     <div class="container">
         <!-- 1. SECCIÓN DE TAREAS PENDIENTES -->
         <div class="row">
-            <div class="col s12">
+            <div name = "pendientes" class="col s12 m6">
                 <div class="card white z-depth-1">
-                    <div class="card-content azul_portada">
+                    <div class="card-content azul_portada" style="padding: 20px; margin-bottom: 20px;">
                                 <span class="card-title center-align claro-text"><strong>Te vas a poner a chambear? (Pendientes)</strong></span>
                         
                         <div class="horizontal-scroll-container mt-3">
                             {% for task in todo %}
                                 {% if not task.complete %}
-                                    <div class="card negro task-card">
+                                    <div id ="tarea" class="card negro task-card" draggable="true">
                                         <div class="card-content ">
                                             <span class="card-title claro_text truncate">{{ task.titulo }}</span>
                                             <p class="claro_text">{{ task.descripcion }}</p>
@@ -65,13 +69,13 @@
                     </div>
                 </div>
             </div>
-        </div>
+       
 
         <!-- 2. SECCIÓN DE TAREAS COMPLETADAS (DESPLEGABLE) -->
-        <div class="row">
-            <div class="col s12">
+        
+            <div name="completadas" class="col s12 m6">
                 <div class="card white z-depth-1">
-                    <div class="card-content azul_portada">
+                    <div class="card-content azul_portada" style ="padding: 20px; margin-bottom: 20px;">
                         <details>
                             <summary class="card-title white_text" style="cursor: pointer; font-weight: bold;"><Strong>
                                 Tareas Completadas
@@ -81,7 +85,7 @@
                             <div class="horizontal-scroll-container mt-3">
                                 {% for task in todo %}
                                     {% if task.complete %}
-                                        <div class="card negro task-card">
+                                        <div id="tarea2" class="card negro task-card" draggable="true">
                                             <div class="card-content" claro_text>
                                                 <span class="card-title claro_text truncate">{{ task.titulo }}</span>
                                                 <p class="claro_text">{{ task.descripcion }}</p>
